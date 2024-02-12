@@ -60,6 +60,20 @@ $(function () {
             success: postPlaces
         });
     });
+
+    $(".spanReview").click(function () {
+        $.get("http://0.0.0.0:5001/api/v1/places/" + $(this).attr("data-id") + "/reviews", function(response) {
+            if ($(".spanReview").text() === "show") {
+                for (const review of response) {
+                    $(".reviews ul").append("<li>{{ review.text }}</li>");
+                }
+                $(".spanReview").text("hide");
+            } else if ($(".spanReview").text() === "hide") {
+                $(".reviews ul").empty();
+                $(".spanReview").text("show");
+            }
+        });
+    });
 });
 
 
@@ -80,6 +94,10 @@ function postPlaces (response) {
                    </div>
                    <div class="description">
                      {{ place.description | safe }}
+                   </div>
+                   <div class="reviews">
+                     <h2>Reviews <span class="spanReview" data-id="{{ place.id }}">show</span></h2>
+                     <ul></ul>
                    </div>
                  </article>`;
     }));
